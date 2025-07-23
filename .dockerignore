@@ -1,0 +1,6 @@
+# Ignore binaries
+main
+
+# Ignore git and editor files
+.git
+.idea
