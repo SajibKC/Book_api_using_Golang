@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	apiHandler"example/Book_api_using_Golang/apiHandler"
 	"github.com/gin-gonic/gin"
+	authHandler "example/Book_api_using_Golang/authHandler"
 )
 
 var rootCmd = &cobra.Command{
@@ -12,11 +13,12 @@ var rootCmd = &cobra.Command{
 	Short: "Run the Book API server",
 	Run: func(cmd *cobra.Command, args []string) {
 		r := gin.Default()
-		r.GET("/books", apiHandler.GetBooks)
-		r.GET("/books/:id", apiHandler.GetBookByID)
-		r.POST("/books", apiHandler.CreateBook)
-		r.PUT("/books/:id", apiHandler.UpdateBookByID)
-		r.DELETE("/books/:id", apiHandler.DeleteBookByID)
+		r.GET("/books", authHandler.AuthMiddleware(), apiHandler.GetBooks)
+		r.GET("/books/:id", authHandler.AuthMiddleware(), apiHandler.GetBookByID)
+		r.POST("/books", authHandler.AuthMiddleware(), apiHandler.CreateBook)
+		r.PUT("/books/:id", authHandler.AuthMiddleware(), apiHandler.UpdateBookByID)
+		r.DELETE("/books/:id", authHandler.AuthMiddleware(), apiHandler.DeleteBookByID)
+		r.POST("/users", apiHandler.CreateUSer)
 
 		err := r.Run(":8080")
 		if err != nil {
